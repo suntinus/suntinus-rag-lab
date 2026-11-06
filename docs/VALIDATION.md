@@ -10,6 +10,7 @@
 - Uma consulta privada recuperou o documento de contexto consolidado, mas o modelo leve não produziu referência válida. O conteúdo privado e suas respostas não são publicados aqui.
 - Backup local: checksum, criptografia/descriptografia, download do snapshot remoto e restauração em banco novo conferidos. Banco original preservado. Chave privada mantida fora do repositório.
 - Sintaxe dos scripts PowerShell e configuração Compose verificadas. Código público separado de `.env`, dados, dumps e chaves por exclusões e revisão dos arquivos preparados para commit.
+- Imagem Java construída e iniciada no Compose com PostgreSQL e Ollama; health e endpoints autenticados responderam. A avaliação sintética foi repetida dentro do container com os mesmos quatro acertos de recuperação e duas abstenções.
 
 ## Limites
 

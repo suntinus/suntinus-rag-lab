@@ -1,0 +1,4 @@
+# Opt-in only: Docker Desktop with NVIDIA GPU support required.
+services:
+  ollama:
+    gpus: all

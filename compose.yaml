@@ -1,0 +1,41 @@
+name: suntinus-rag-lab
+services:
+  postgres:
+    image: pgvector/pgvector:0.8.1-pg17
+    environment:
+      POSTGRES_DB: rag
+      POSTGRES_USER: rag
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Run scripts/init-local.ps1 first}
+    ports: ["127.0.0.1:55438:5432"]
+    volumes: ["pgdata:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rag -d rag"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+  ollama:
+    image: ollama/ollama:0.40.15
+    ports: ["127.0.0.1:11438:11434"]
+    volumes: ["ollama:/root/.ollama"]
+    environment:
+      OLLAMA_NUM_PARALLEL: "1"
+      OLLAMA_MAX_LOADED_MODELS: "2"
+    restart: unless-stopped
+  app:
+    profiles: ["app"]
+    build: .
+    environment:
+      SERVER_ADDRESS: 0.0.0.0
+      DB_URL: jdbc:postgresql://postgres:5432/rag
+      DB_PASSWORD: ${DB_PASSWORD:?Run scripts/init-local.ps1 first}
+      RAG_API_TOKEN: ${RAG_API_TOKEN:?Run scripts/init-local.ps1 first}
+      OLLAMA_URL: http://ollama:11434
+      EMBEDDING_REVISION: ${EMBEDDING_REVISION:?Run scripts/pull-models.ps1 first}
+    ports: ["127.0.0.1:8110:8110"]
+    depends_on:
+      postgres: {condition: service_healthy}
+      ollama: {condition: service_started}
+volumes:
+  pgdata:
+  ollama:

@@ -1,0 +1,15 @@
+target/
+.env
+.env.*
+!.env.example
+data/
+backups/
+private/
+*.dump
+*.backup
+*.key
+*.pem
+rclone.conf
+*.log
+.idea/
+.vscode/
